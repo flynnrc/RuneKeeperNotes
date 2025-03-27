@@ -28,6 +28,11 @@ namespace RuneKeeperNotes.Controllers
         [HttpPost]
         public IActionResult Create(Note note)
         {
+            if (!string.IsNullOrEmpty(note.RuneName) && !RuneData.IsValidRuneByName(note.RuneName))
+            {
+                return BadRequest(new { message = "Invalid rune name", rune = note.RuneName });
+            }
+
             _repository.Add(note);
             return CreatedAtAction(nameof(GetNoteById), new { id = note.Id }, note);
         }
@@ -46,6 +51,25 @@ namespace RuneKeeperNotes.Controllers
             _repository.Delete(id);
             return NoContent();
         }
+
+        [HttpGet("validate/{rune}")]
+        public IActionResult ValidateRune(string rune)
+        {
+            if (RuneData.IsValidRuneByName(rune))
+            {
+                //could turn this into tryget to make it cleaner
+                var r = RuneData.GetRuneByName(rune);
+                return Ok(new { message = "Valid rune", rune, r.Name, r.Symbol, r.Meaning});
+            }
+            if(RuneData.IsValidRuneBySymbol(rune))
+            {
+                var r = RuneData.GetRuneByName(rune);
+                return Ok(new { message = "Valid rune", r.Name, r.Symbol, r.Meaning});
+            }
+
+            return BadRequest(new { message = "Invalid rune", rune });
+        }
+
     }
 
 }
