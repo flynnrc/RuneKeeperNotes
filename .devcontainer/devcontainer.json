@@ -1,7 +1,7 @@
 {
   "name": ".NET Dev Environment with Claude Code",
 
-  "image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:1-9.0",
 
   "forwardPorts": [5000, 5001],
 
