@@ -1,39 +1,33 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/dotnet
 {
   "name": "RuneKeeperNotes - .NET 8 + Claude Code",
 
   "image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0",
 
-  // Forward common ASP.NET Core ports so you can hit the API from your host browser
   "forwardPorts": [5000, 5001],
 
-  // Optional: Label ports nicely (HTTPS for 5001)
   "portsAttributes": {
     "5001": {
       "protocol": "https"
     }
   },
 
-  // Run these after container creation (installs Claude Code via official script + dotnet restore)
-  //"postCreateCommand": "curl -fsSL https://claude.ai/install.sh | bash && dotnet restore",
-  "postCreateCommand": "curl -fsSL https://claude.ai/install.sh | bash && dotnet restore && echo 'alias yolo=\"claude --dangerously-skip-permissions\"' >> ~/.bashrc",
+  "mounts": [
+    "source=runekeeper-claude-config,target=/home/vscode/.claude,type=volume"
+  ],
 
-  // Optional: Run on every attach (e.g., to verify Claude Code works)
-  // "postAttachCommand": "claude --version",
+  // Fix volume ownership before installing Claude Code
+  "postCreateCommand": "sudo chown -R vscode:vscode /home/vscode/.claude && curl -fsSL https://claude.ai/install.sh | bash && dotnet restore && echo 'alias yolo=\"claude --dangerously-skip-permissions\"' >> ~/.bashrc",
 
-  // VS Code customizations inside the container
   "customizations": {
-  "vscode": {
-    "extensions": [
-      "ms-dotnettools.csharp",                    // Base language service (auto-included by Dev Kit, but explicit is fine)
-      "ms-dotnettools.csdevkit",                  // Solution Explorer + advanced test/debug + more
-      "humao.rest-client",                        // .http files for quick API testing (GET/POST notes)
-      "ms-dotnettools.vscodeintellicode-csharp"   // Optional: AI-powered completions (whole-line, starred suggestions)
-    ]
-  }
-},
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.csdevkit",
+        "humao.rest-client",
+        "ms-dotnettools.vscodeintellicode-csharp"
+      ]
+    }
+  },
 
-  // Use non-root user (best practice + Claude Code works fine as 'vscode' user)
   "remoteUser": "vscode"
 }
