@@ -8,6 +8,13 @@ sudo chown -R vscode:vscode /home/vscode/.claude
 # Install Claude Code CLI
 curl -fsSL https://claude.ai/install.sh | bash
 
+# If API key is set, no login needed. Otherwise, user will need to authenticate via OAuth.
+if [ -n "$ANTHROPIC_API_KEY" ]; then
+  echo "ANTHROPIC_API_KEY detected - Claude Code will use API key authentication"
+else
+  echo "No API key set - Claude Code will use OAuth authentication (may require re-auth on container rebuild)"
+fi
+
 # Restore .NET dependencies
 dotnet restore
 
