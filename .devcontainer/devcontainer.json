@@ -1,5 +1,5 @@
 {
-  "name": "RuneKeeperNotes - .NET 8 + Claude Code",
+  "name": ".NET Dev Environment with Claude Code",
 
   "image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0",
 
@@ -15,8 +15,7 @@
     "source=runekeeper-claude-config,target=/home/vscode/.claude,type=volume"
   ],
 
-  // Fix volume ownership before installing Claude Code
-  "postCreateCommand": "sudo chown -R vscode:vscode /home/vscode/.claude && curl -fsSL https://claude.ai/install.sh | bash && dotnet restore && echo 'alias yolo=\"claude --dangerously-skip-permissions\"' >> ~/.bashrc",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
 
   "customizations": {
     "vscode": {
