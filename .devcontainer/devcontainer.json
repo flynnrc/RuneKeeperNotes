@@ -17,7 +17,7 @@
   },
 
   "mounts": [
-    "source=runekeeper-claude-config,target=/home/vscode/.claude,type=volume"
+    "source=runekeeper-home,target=/home/vscode,type=volume"
   ],
 
   "postCreateCommand": "bash .devcontainer/post-create.sh",
